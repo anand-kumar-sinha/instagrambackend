@@ -66,7 +66,7 @@ const loginUser = async (req, res) => {
       return;
     }
 
-    const user = await User.findOne({ username }).populate('posts');
+    const user = await User.findOne({ username })
 
     if(!user){
       res.status(404).json({
