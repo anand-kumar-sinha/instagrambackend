@@ -66,9 +66,9 @@ const loginUser = async (req, res) => {
       return;
     }
 
-    const user = await User.findOne({ username })
+    const user = await User.findOne({ username });
 
-    if(!user){
+    if (!user) {
       res.status(404).json({
         success: false,
         message: "User not found",
@@ -76,7 +76,7 @@ const loginUser = async (req, res) => {
       return;
     }
 
-    if(user?.password !== password){
+    if (user?.password !== password) {
       res.status(401).json({
         success: false,
         message: "Incorrect password",
@@ -100,7 +100,38 @@ const loginUser = async (req, res) => {
   }
 };
 
+const myProfile = async (req, res) => {
+  try {
+    let user = req?.user;
+    if (!user) {
+      res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+
+      return;
+    }
+
+    const id = req.user._id;
+
+    user = await User.findById(id);
+
+    res.status(200).json({
+      success: true,
+      message: `Welcome ${user.name}`,
+      user,
+      // posts: posts.posts.reverse(),
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  myProfile,
 };

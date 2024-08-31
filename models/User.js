@@ -27,7 +27,7 @@ const userModel = mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://upload.wikimedia.org/wikipedia/commons/1/17/Mangekyou_Sharingan_Itachi.svg",
+        "https://firebasestorage.googleapis.com/v0/b/leafy-beach-388109.appspot.com/o/files%2F65edb6f18a79f4b2ed9a3596?alt=media&token=21fe8308-fa56-4cd6-9f0a-b27270e40901",
     },
     bio: {
       type: String,
