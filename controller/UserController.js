@@ -59,14 +59,14 @@ const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res.status(300).json({
+      res.status(401).json({
         success: false,
         message: "Please enter all details",
       });
       return;
     }
 
-    const user = await User.findOne({ username }).select("+password");
+    const user = await User.findOne({ username }).populate('posts');
 
     if(!user){
       res.status(404).json({
