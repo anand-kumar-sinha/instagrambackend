@@ -59,7 +59,7 @@ const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      res.status(401).json({
+      res.status(300).json({
         success: false,
         message: "Please enter all details",
       });
