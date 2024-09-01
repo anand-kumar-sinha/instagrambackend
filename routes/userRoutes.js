@@ -4,7 +4,7 @@ const {protect} = require('../middleware/Auth')
 
 const router = express.Router()
 
-router.route('/register').get(registerUser)
+router.route('/register').post(registerUser)
 router.route('/login').post(loginUser)
 router.route('/me').get(protect, myProfile)
 
