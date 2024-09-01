@@ -133,7 +133,7 @@ const myProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   try {
     const user = req?.user;
-    const { name, taged, bio, mobile, link, gender } = req.body;
+    const { name, taged, bio, mobile, link, gender, avatar } = req.body;
     if (!user) {
       res.status(401).json({
         success: false,
@@ -151,9 +151,9 @@ const editProfile = async (req, res) => {
       return;
     }
 
-    // if (avatar) {
-    //   user.avatar = avatar;
-    // }
+    if (avatar) {
+      user.avatar = avatar;
+    }
 
     if (name) {
       user.name = name;
