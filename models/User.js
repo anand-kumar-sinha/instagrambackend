@@ -20,7 +20,7 @@ const userModel = mongoose.Schema(
       type: String,
       required: [true, "Please Enter your password"],
     },
-    tages: {
+    taged: {
       type: String,
     },
     bio: {
@@ -30,6 +30,9 @@ const userModel = mongoose.Schema(
       type: Number,
     },
     link: {
+      type: String,
+    },
+    gender:{
       type: String,
     },
     avatar: {

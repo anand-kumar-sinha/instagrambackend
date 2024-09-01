@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const generateToken = require("../middleware/generateToken");
-const { model } = require("mongoose");
+
 
 const registerUser = async (req, res) => {
   try {
@@ -130,8 +130,71 @@ const myProfile = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  try {
+    const user = req?.user;
+    const { name, taged, bio, mobile, link, gender } = req.body;
+    if (!user) {
+      res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+      return;
+    }
+
+    const existing = await User.findOne({ _id: user._id });
+    if (!existing) {
+      res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    // if (avatar) {
+    //   user.avatar = avatar;
+    // }
+
+    if (name) {
+      user.name = name;
+    }
+
+    if (taged) {
+      user.taged = tages;
+    }
+    if (mobile) {
+      user.mobile = mobile;
+    }
+
+    if (link) {
+      user.link = link;
+    }
+
+    if (gender) {
+      user.gender = gender;
+    }
+
+    if (bio) {
+      user.bio = bio;
+    }
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   myProfile,
+  editProfile
 };
