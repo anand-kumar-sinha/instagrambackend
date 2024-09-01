@@ -160,7 +160,7 @@ const editProfile = async (req, res) => {
     }
 
     if (taged) {
-      user.taged = tages;
+      user.taged = taged;
     }
     if (mobile) {
       user.mobile = mobile;
