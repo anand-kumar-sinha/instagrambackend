@@ -8,7 +8,7 @@ router.route('/register').post(registerUser)
 router.route('/login').post(loginUser)
 router.route('/me').get(protect, myProfile)
 router.route('/edit-profile').post(protect, editProfile)
-router.route('/search/:key').get(searchUser)
+router.route('/search?:key').get(searchUser)
 
 
 module.exports = router
