@@ -192,9 +192,38 @@ const editProfile = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    const user = await User.find({
+      $or: [
+        { name: { $regex: req.params.key, $options: "i" } },
+        { username: { $regex: req.params.key, $options: "i" } },
+      ],
+    });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "NO students found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
   myProfile,
-  editProfile
+  editProfile,
+  searchUser
 };
