@@ -203,7 +203,7 @@ const searchUser = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "NO students found",
+        message: "No users found",
       });
     }
 
