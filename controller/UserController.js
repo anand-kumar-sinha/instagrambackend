@@ -200,7 +200,7 @@ const searchUser = async (req, res) => {
         { name: { $regex: req.params.key, $options: "i" } },
         { username: { $regex: req.params.key, $options: "i" } },
       ],
-    });
+    }).populate('posts');
     if (!user) {
       return res.status(400).json({
         success: false,
