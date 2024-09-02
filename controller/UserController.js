@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const generateToken = require("../middleware/generateToken");
+const Post = require("../models/Post");
 
 
 const registerUser = async (req, res) => {
@@ -248,6 +249,7 @@ const createPost = async (req, res) => {
       post,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: error,
