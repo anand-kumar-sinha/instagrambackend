@@ -219,11 +219,46 @@ const searchUser = async (req, res) => {
   }
 };
 
+const createPost = async (req, res) => {
+  try {
+    const newPost = {
+      desc: req.body.desc,
+      postUrl: req.body.postUrl,
+      admin: req.user._id,
+    };
+
+    if (!newPost.postUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Please Select Media",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    const post = await Post.create(newPost);
+
+    user.posts.push(post._id);
+    user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Post created successfully",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
   myProfile,
   editProfile,
-  searchUser
+  searchUser,
+  createPost
 };
