@@ -240,8 +240,8 @@ const createPost = async (req, res) => {
 
     const post = await Post.create(newPost);
 
-    user.posts.push(post._id);
-    user.save();
+    await user.posts.push(post._id);
+    await user.save();
 
     res.status(201).json({
       success: true,
