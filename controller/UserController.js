@@ -2,7 +2,6 @@ const User = require("../models/User");
 const generateToken = require("../middleware/generateToken");
 const Post = require("../models/Post");
 
-
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, username } = req.body;
@@ -116,12 +115,13 @@ const myProfile = async (req, res) => {
     const id = req.user._id;
 
     user = await User.findById(id);
+    const posts = await User.findById(id).populate("posts");
 
     res.status(200).json({
       success: true,
       message: `Welcome ${user.name}`,
       user,
-      // posts: posts.posts.reverse(),
+      posts: posts.posts.reverse(),
     });
   } catch (error) {
     res.status(400).json({
@@ -249,7 +249,7 @@ const createPost = async (req, res) => {
       post,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error,
@@ -263,5 +263,5 @@ module.exports = {
   myProfile,
   editProfile,
   searchUser,
-  createPost
+  createPost,
 };
