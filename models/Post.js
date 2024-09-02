@@ -8,6 +8,9 @@ const postModel = mongoose.Schema(
     postUrl: {
       type: String,
     },
+    postType: {
+        type: String,
+    },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

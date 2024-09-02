@@ -224,6 +224,7 @@ const createPost = async (req, res) => {
     const newPost = {
       desc: req.body.desc,
       postUrl: req.body.postUrl,
+      postType: req.body.postType,
       admin: req.user._id,
     };
 
