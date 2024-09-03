@@ -10,7 +10,6 @@ router.route('/me').get(protect, myProfile)
 router.route('/edit-profile').post(protect, editProfile)
 router.route('/search/:key').get(searchUser)
 router.route('/createpost').post(protect, createPost)
-router.route('/findposts/:id').get(findAllPostsById)
 
 
 module.exports = router

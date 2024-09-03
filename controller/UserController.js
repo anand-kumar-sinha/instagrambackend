@@ -256,33 +256,6 @@ const createPost = async (req, res) => {
   }
 };
 
-const findAllPostsById = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid User ID",
-      });
-    }
-
-    const posts = await User.findById(id).populate("posts");
-
-    res.status(200).json({
-      success: true,
-      message: "Posts fetched successfully",
-      posts: posts.posts.reverse(),
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error,
-    });
-  }
-};
-
 module.exports = {
   registerUser,
   loginUser,
@@ -290,5 +263,4 @@ module.exports = {
   editProfile,
   searchUser,
   createPost,
-  findAllPostsById,
 };
