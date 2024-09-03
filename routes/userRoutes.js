@@ -7,6 +7,7 @@ const {
   searchUser,
   createPost,
   findAllPosts,
+  findAllPostsById,
 } = require("../controller/UserController");
 const { protect } = require("../middleware/Auth");
 
@@ -18,6 +19,7 @@ router.route("/me").get(protect, myProfile);
 router.route("/edit-profile").post(protect, editProfile);
 router.route("/search/:key").get(searchUser);
 router.route("/createpost").post(protect, createPost);
+router.route('/findposts/:id').get(findAllPostsById)
 router.route("/post?:page").get(findAllPosts);
 
 module.exports = router;

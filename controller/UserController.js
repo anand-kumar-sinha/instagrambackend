@@ -255,6 +255,29 @@ const createPost = async (req, res) => {
   }
 };
 
+const findAllPostsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid User ID",
+      });
+    }
+
+    const posts = await User.findById(id).populate("posts");
+
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts: posts.posts.reverse(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const findAllPosts = async (req, res) => {
   try {
     const { page } = req.query;
@@ -294,5 +317,6 @@ module.exports = {
   editProfile,
   searchUser,
   createPost,
+  findAllPostsById,
   findAllPosts,
 };
