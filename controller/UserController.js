@@ -200,7 +200,7 @@ const searchUser = async (req, res) => {
         { name: { $regex: req.params.key, $options: "i" } },
         { username: { $regex: req.params.key, $options: "i" } },
       ],
-    }).populate('posts');
+    }).populate("posts");
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -248,6 +248,37 @@ const createPost = async (req, res) => {
       message: "Post created successfully",
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const findAllPosts = async (req, res) => {
+  try {
+    const { page } = req.query;
+    const limit = 3;
+    const pageNo = parseInt(page, 10);
+
+    const startIndex = (pageNo - 1) * limit;
+
+    const total = await Post.countDocuments({});
+
+    const posts = await Post.find()
+      .populate("admin")
+      .sort({ createdAt: -1 })
+      .skip(startIndex)
+      .limit(limit);
+
+    res.status(200).json({
+      success: true,
+      message: `Posts fetched successfully`,
+      posts,
+      currentPage: pageNo,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
@@ -263,4 +294,5 @@ module.exports = {
   editProfile,
   searchUser,
   createPost,
+  findAllPosts,
 };
