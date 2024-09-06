@@ -115,13 +115,11 @@ const myProfile = async (req, res) => {
     const id = req.user._id;
 
     user = await User.findById(id);
-    const posts = await User.findById(id).populate("posts");
 
     res.status(200).json({
       success: true,
       message: `Welcome ${user.name}`,
       user,
-      posts: posts.posts.reverse(),
     });
   } catch (error) {
     res.status(400).json({
@@ -315,7 +313,7 @@ const addStatus = async (req, res) => {
     const { status } = req.body;
     const user = req.user;
 
-    if(!user){
+    if (!user) {
       return res.status(401).json({
         success: false,
         message: "Please Login Again",
@@ -354,5 +352,5 @@ module.exports = {
   createPost,
   findAllPostsById,
   findAllPosts,
-  addStatus
+  addStatus,
 };
