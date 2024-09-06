@@ -9,6 +9,7 @@ const {
   findAllPosts,
   findAllPostsById,
   addStatus,
+  findAllStatus,
 } = require("../controller/UserController");
 const { protect } = require("../middleware/Auth");
 
@@ -23,5 +24,6 @@ router.route("/createpost").post(protect, createPost);
 router.route('/findposts/:id').get(findAllPostsById)
 router.route("/post?:page").get(findAllPosts);
 router.route("/add-status").post(protect, addStatus);
+router.route("/status?:page").get(findAllStatus)
 
 module.exports = router;

@@ -308,6 +308,36 @@ const findAllPosts = async (req, res) => {
   }
 };
 
+const findAllStatus = async (req, res) => {
+  try {
+    const { page } = req.query;
+    const limit = 5;
+    const pageNo = parseInt(page, 10);
+
+    const startIndex = (pageNo - 1) * limit;
+
+    const total = await User.countDocuments({});
+
+    const user = await User.find()
+      .sort({ createdAt: -1 })
+      .skip(startIndex)
+      .limit(limit);
+
+    res.status(200).json({
+      success: true,
+      message: `Status fetched successfully`,
+      user,
+      currentPage: pageNo,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 const addStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -353,4 +383,5 @@ module.exports = {
   findAllPostsById,
   findAllPosts,
   addStatus,
+  findAllStatus,
 };
