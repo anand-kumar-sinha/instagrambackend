@@ -282,7 +282,7 @@ const findAllPostsById = async (req, res) => {
 const findAllPosts = async (req, res) => {
   try {
     const { page } = req.query;
-    const limit = 3;
+    const limit = 5;
     const pageNo = parseInt(page, 10);
 
     const startIndex = (pageNo - 1) * limit;
@@ -303,7 +303,41 @@ const findAllPosts = async (req, res) => {
       totalPages: Math.ceil(total / limit),
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const addStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const user = req.user;
+
+    if(!user){
+      return res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+    }
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "Please Select Media",
+      });
+    }
+
+    user.status = status;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Status updated successfully",
+      user,
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error,
@@ -320,4 +354,5 @@ module.exports = {
   createPost,
   findAllPostsById,
   findAllPosts,
+  addStatus
 };
