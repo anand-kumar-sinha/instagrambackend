@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const generateToken = require("../middleware/generateToken");
 const Post = require("../models/Post");
+const redis = require("../config/redis");
 
 const registerUser = async (req, res) => {
   try {
@@ -287,11 +288,29 @@ const findAllPosts = async (req, res) => {
 
     const total = await Post.countDocuments({});
 
+    let isExist = await redis.get(`posts:${pageNo}`);
+
+    if (isExist) {
+      isExist = await JSON.parse(isExist);
+      console.log('redis')
+      res.status(200).json({
+        success: true,
+        message: `Posts fetched successfully`,
+        posts: isExist,
+        currentPage: pageNo,
+        totalPages: Math.ceil(total / limit),
+      });
+
+      return;
+    }
+
     const posts = await Post.find()
       .populate("admin")
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
+
+    await redis.set(`posts:${pageNo}`, JSON.stringify(posts));
 
     res.status(200).json({
       success: true,
