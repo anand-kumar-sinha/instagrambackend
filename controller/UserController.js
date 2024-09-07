@@ -113,9 +113,24 @@ const myProfile = async (req, res) => {
       return;
     }
 
+    let isExist = await redis.get(`user:${user._id}`)
+
+    if (isExist) {
+      isExist = await JSON.parse(isExist);
+      console.log('redis')
+      res.status(200).json({
+        success: true,
+        message: `Welcome ${user.name}`,
+        user: isExist,
+      });
+      return;
+    }
+
     const id = req.user._id;
 
     user = await User.findById(id);
+
+    await redis.setex(`user:${id}`, 600, JSON.stringify(user));
 
     res.status(200).json({
       success: true,
@@ -123,6 +138,7 @@ const myProfile = async (req, res) => {
       user,
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json({
       success: false,
       message: error,
@@ -266,7 +282,25 @@ const findAllPostsById = async (req, res) => {
       });
     }
 
+    let isExist = await redis.get(`posts:id:${id}`);
+
+    if (isExist) {
+      isExist = JSON.parse(isExist);
+      res.status(200).json({
+        success: true,
+        message: "Posts fetched successfully",
+        posts: isExist.reverse(),
+      });
+      return;
+    }
+
     const posts = await User.findById(id).populate("posts");
+
+    await redis.setex(
+      `posts:id:${id}`,
+      600,
+      JSON.stringify(posts.posts.reverse())
+    );
 
     res.status(200).json({
       success: true,
@@ -292,7 +326,7 @@ const findAllPosts = async (req, res) => {
 
     if (isExist) {
       isExist = await JSON.parse(isExist);
-      console.log('redis')
+      console.log("redis");
       res.status(200).json({
         success: true,
         message: `Posts fetched successfully`,
@@ -310,7 +344,7 @@ const findAllPosts = async (req, res) => {
       .skip(startIndex)
       .limit(limit);
 
-    await redis.set(`posts:${pageNo}`, JSON.stringify(posts));
+    await redis.setex(`posts:${pageNo}`, 600, JSON.stringify(posts));
 
     res.status(200).json({
       success: true,
@@ -337,10 +371,28 @@ const findAllStatus = async (req, res) => {
 
     const total = await User.countDocuments({});
 
+    let isExist = await redis.get(`status:${pageNo}`);
+
+    if (isExist) {
+      isExist = await JSON.parse(isExist);
+      console.log("redis");
+      res.status(200).json({
+        success: true,
+        message: `Status fetched successfully`,
+        user: isExist,
+        currentPage: pageNo,
+        totalPages: Math.ceil(total / limit),
+      });
+
+      return;
+    }
+
     const user = await User.find()
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
+
+    await redis.setex(`status:${pageNo}`, 600, JSON.stringify(user));
 
     res.status(200).json({
       success: true,
