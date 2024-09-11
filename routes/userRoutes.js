@@ -11,6 +11,7 @@ const {
   addStatus,
   findAllStatus,
   likeAndUnlike,
+  followUser,
 } = require("../controller/UserController");
 const { protect } = require("../middleware/Auth");
 
@@ -22,10 +23,11 @@ router.route("/me").get(protect, myProfile);
 router.route("/edit-profile").post(protect, editProfile);
 router.route("/search/:key").get(searchUser);
 router.route("/createpost").post(protect, createPost);
-router.route('/findposts/:id').get(findAllPostsById)
+router.route("/findposts/:id").get(findAllPostsById);
 router.route("/post?:page").get(findAllPosts);
 router.route("/add-status").post(protect, addStatus);
-router.route("/status?:page").get(findAllStatus)
-router.route("/like-unlike/:id").get(protect, likeAndUnlike)
+router.route("/status?:page").get(findAllStatus);
+router.route("/like-unlike/:id").get(protect, likeAndUnlike);
+router.route("/follow/:id").get(protect, followUser);
 
 module.exports = router;

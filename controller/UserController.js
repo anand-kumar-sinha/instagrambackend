@@ -505,6 +505,69 @@ const likeAndUnlike = async (req, res) => {
   }
 };
 
+const followUser = async (req, res) => {
+  try {
+    const userFollow = await User.findById(req.params.id);
+    const loggedUser = await User.findById(req.user._id);
+
+    if(!loggedUser){
+      return res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+    }
+
+    if (!userFollow){
+      return res.status(404).json({
+        success: false,
+        message: "User doest not exists",
+      });
+    }
+
+    if (loggedUser._id === userFollow._id) {
+      return res.status(401).json({
+        success: false,
+        message: "You cannot follow yourself",
+      });
+    }
+
+
+    //checking user is already followed or not
+    if (loggedUser.followings.includes(userFollow._id)) {
+      const indexfollowing = loggedUser.followings.indexOf(userFollow._id);
+      const indexfollower = userFollow.followers.indexOf(loggedUser._id);
+
+      loggedUser.followings.splice(indexfollowing, 1);
+      userFollow.followers.splice(indexfollower, 1);
+
+      await loggedUser.save();
+      await userFollow.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "User unfollowed",
+      });
+    }
+
+    loggedUser.followings.push(userFollow._id);
+    userFollow.followers.push(loggedUser._id);
+
+    await loggedUser.save();
+    await userFollow.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Follow successfull",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -516,5 +579,6 @@ module.exports = {
   findAllPosts,
   addStatus,
   findAllStatus,
-  likeAndUnlike
+  likeAndUnlike,
+  followUser
 };
