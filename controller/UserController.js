@@ -130,7 +130,7 @@ const myProfile = async (req, res) => {
 
     user = await User.findById(id);
 
-    await redis.setex(`user:${id}`, 600, JSON.stringify(user));
+    await redis.setex(`user:${id}`, 60, JSON.stringify(user));
 
     res.status(200).json({
       success: true,
@@ -344,7 +344,7 @@ const findAllPosts = async (req, res) => {
       .skip(startIndex)
       .limit(limit);
 
-    await redis.setex(`posts:${pageNo}`, 600, JSON.stringify(posts));
+    await redis.setex(`posts:${pageNo}`, 60, JSON.stringify(posts));
 
     res.status(200).json({
       success: true,
@@ -392,7 +392,7 @@ const findAllStatus = async (req, res) => {
       .skip(startIndex)
       .limit(limit);
 
-    await redis.setex(`status:${pageNo}`, 600, JSON.stringify(user));
+    await redis.setex(`status:${pageNo}`, 60, JSON.stringify(user));
 
     res.status(200).json({
       success: true,
