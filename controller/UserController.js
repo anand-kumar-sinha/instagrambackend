@@ -444,6 +444,67 @@ const addStatus = async (req, res) => {
   }
 };
 
+const likeAndUnlike = async (req, res) => {
+  try {
+    const {id} = req.params
+    const user = req.user
+
+    if (!user){
+      res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+      return;
+    }
+
+    if (!id) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    const index = post.likes.indexOf(user._id);
+
+    if(index === -1){
+      post.likes.push(user._id)
+      post.save()
+
+      res.status(201).json({
+        success: true,
+        message: "Liked successfully",
+      })
+      return;
+    }
+
+    post.likes.splice(index, 1)
+    post.save()
+
+    res.status(201).json({
+      success: true,
+      message: "Unliked successfully",
+    })
+    return;
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -455,4 +516,5 @@ module.exports = {
   findAllPosts,
   addStatus,
   findAllStatus,
+  likeAndUnlike
 };
