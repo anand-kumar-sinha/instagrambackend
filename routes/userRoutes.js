@@ -26,6 +26,6 @@ router.route('/findposts/:id').get(findAllPostsById)
 router.route("/post?:page").get(findAllPosts);
 router.route("/add-status").post(protect, addStatus);
 router.route("/status?:page").get(findAllStatus)
-router.route("/like-unlike/:id").post(protect, likeAndUnlike)
+router.route("/like-unlike/:id").get(protect, likeAndUnlike)
 
 module.exports = router;
